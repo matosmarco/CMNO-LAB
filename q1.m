@@ -10,3 +10,8 @@ eig_values_A = eig(A);
 % Print to console the results
 fprintf("Question 1\n \nEigenvalues of A:\n")
 disp(eig_values_A)
+
+% Build state-space model 
+sys = ss(A,B,C,D);
+
+pzplot(sys)
