@@ -2,9 +2,9 @@
 
 % K computation: computing the Regulator Gain
 load("IP_MODEL.mat")
-Q_r = diag([5,0,20,0,0]);
+Q_r = diag([90,0,3000,0,0]);
 
-R_r = 1e-5;
+R_r = 0.04;
 %R_r = 10;
 
 [K,S,P] = lqr(A,B,Q_r,R_r); %Calculate feedback gain
@@ -43,6 +43,7 @@ set(gg,'LineWidth',1.5)
 gg=xlabel('Time (s)');
 set(gg,'Fontsize',14);
 gg=ylabel('Angle states [rad]');
+ylim([-0.4, 0.4])
 set(gg,'Fontsize',14);
 legend('\alpha [rad]', '\beta [rad]', 'Interpreter', 'latex', 'Fontsize', 16)
 
