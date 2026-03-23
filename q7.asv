@@ -7,3 +7,7 @@ L = lqe(A, G, C, Qe, Re); %Calculate estimator gains
 disp(L)
 
 obs_A = A- L*C;
+
+
+
+% Compare poles of the sytem: observer must 
