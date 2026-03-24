@@ -2,8 +2,7 @@
 
 % K computation: computing the Regulator Gain
 load("IP_MODEL.mat")
-Q_r = diag([90,0,3000,0,0]);
-
+Q_r = diag([40, 1, 1000, 1, 0]); 
 R_r = 0.04;
 %R_r = 10;
 
@@ -53,4 +52,13 @@ gg2=plot(out.t.Data,out.u.Data);
 set(gg2,'LineWidth',1.5)
 gg2=xlabel('Time (s)');
 set(gg2,'Fontsize',14);
-gg2=ylabel('$u$ [V]', 'Interpreter','latex', 'FontSize', 16); %TODO: MELHORAR LEGENDA
+gg2=ylabel('$u$ [V]', 'Interpreter','latex', 'FontSize', 16); 
+
+
+% Metrics
+t = out.t.Data;
+alpha = out.y.Data(:,1);
+beta = out.y.Data(:,2);
+u = out.u.Data;
+
+% Integral 
