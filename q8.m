@@ -2,7 +2,7 @@
 
 % K computation: computing the Regulator Gain
 load("IP_MODEL.mat")
-Q_r = diag([40, 1, 1000, 1, 0]); 
+Q_r = diag([90, 0, 3200, 0, 0]); 
 R_r = 0.04;
 %R_r = 10;
 
@@ -11,11 +11,9 @@ R_r = 0.04;
 fprintf("Question 5\n \n Vector K: \n")
 disp(K)
 
-
-
 % L computation
 G = eye(size(A)); %Gain of the process noise
-Qe = eye(size(A))*10; %Variance of process errors
+Qe = eye(size(A))*100; %Variance of process errors
 Re = eye(2); %Variance of measurement errors
 
 L = lqe(A, G, C, Qe, Re); %Calculate estimator gains
@@ -24,7 +22,7 @@ disp(L)
 
 
 estim_A = A - B*K - L*C;
-fprintf("Poles of the estimator: \n")
+fprintf("Poles of the final system (controller + observer): \n")
 
 disp(eig(estim_A))
 
@@ -55,10 +53,56 @@ set(gg2,'Fontsize',14);
 gg2=ylabel('$u$ [V]', 'Interpreter','latex', 'FontSize', 16); 
 
 
-% Metrics
+% Performance Metrics
 t = out.t.Data;
 alpha = out.y.Data(:,1);
-beta = out.y.Data(:,2);
-u = out.u.Data;
+beta  = out.y.Data(:,2);
+u     = out.u.Data;
 
-% Integral 
+% Time step and total time
+dt = t(2) - t(1);
+T_total = t(end) - t(1);
+N = length(t);
+
+% MSE (Mean Squared Error)
+MSE_alpha = sum(alpha.^2) / N;
+MSE_beta  = sum(beta.^2)  / N;
+
+% ISE (Integral Squared Error)
+ISE_alpha = trapz(t, alpha.^2);
+ISE_beta  = trapz(t, beta.^2);
+
+% Control effort (energy)
+control_energy = trapz(t, u.^2);
+
+% Settling time (robust)
+threshold = 0.02; % rad
+settling_time = NaN;
+
+for k = 1:length(beta)
+    if all(abs(beta(k:end)) <= threshold)
+        settling_time = t(k);
+        break;
+    end
+end
+
+
+
+
+% Overshoot
+overshoot = max(abs(beta));
+
+% Print results
+fprintf("Performance Metrics\n")
+
+fprintf("MSE (alpha): %.6f\n", MSE_alpha)
+fprintf("MSE (beta) : %.6f\n", MSE_beta)
+
+fprintf("ISE (alpha): %.6f\n", ISE_alpha)
+fprintf("ISE (beta) : %.6f\n", ISE_beta)
+
+fprintf("Control energy: %.6f\n", control_energy)
+
+fprintf("Settling time: %.3f s\n", settling_time)
+
+fprintf("Overshoot: %.6f rad\n", overshoot)

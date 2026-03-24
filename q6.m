@@ -4,7 +4,7 @@ clear;
 clc;
 load('IP_MODEL.mat'); %%Load Matrices A, B, C, D
 C = eye(5);
-Qr = diag([4,1,100,1,0]); %Weight Matrix for x
+Qr = diag([90,0,3200,0,0]); %Weight Matrix for x
 %Bryson rule
 Rr = 0.04; %Weight for the input variable
 K = lqr(A, B, Qr, Rr); %Calculate feedback gain
