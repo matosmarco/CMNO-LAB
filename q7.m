@@ -1,4 +1,6 @@
 % Compute the estimator gain
+clear;
+clc;
 load("IP_MODEL.mat")
 G = eye(size(A)); %Gain of the process noise
 Qe = eye(size(A))*10; %Variance of process errors

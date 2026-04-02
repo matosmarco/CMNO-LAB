@@ -14,4 +14,4 @@ disp(eig_values_A)
 % Build state-space model 
 sys = ss(A,B,C,D);
 
-pzplot(sys)
+%pzplot(sys)
